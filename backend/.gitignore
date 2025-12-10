@@ -1,1 +1,72 @@
 node_modules
+.env
+dist
+logs
+*.log
+.DS_Store
+.vscode
+coverage
+.idea
+npm-debug.log*
+yarn-error.log*
+*.local
+*.swp
+*.swo
+*.bak
+*.tmp
+*.old
+*.cache
+*.pid
+*.seed
+*.gz
+*.zip
+*.tar
+*.rar
+*.7z
+*.exe
+*.dll
+*.so
+*.dylib
+*.class
+*.jar
+*.war
+
+# Ignore build directories
+build/
+out/
+tmp/
+# Ignore OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+# Ignore dependency directories
+bower_components/
+jspm_packages/
+# Ignore IDE specific files
+*.iml
+*.ipr
+*.iws
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+# Ignore test coverage reports
+coverage/
+.nyc_output/
+# Ignore temporary files created by editors
+*~
+# Ignore log files
+logs/
+*.log
+pids/
+*.pid
+# Ignore environment variable files
+.env.local
+.env.*.local
+# Ignore package lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+# Ignore Docker files
+docker-compose.override.yml
+.docker/

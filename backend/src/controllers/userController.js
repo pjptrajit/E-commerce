@@ -1,9 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import dotenv from 'dotenv'
-
-
+import dotenv from "dotenv";
 
 export async function register(req, res) {
   //Todo
@@ -17,24 +15,20 @@ export async function register(req, res) {
 
   const { name, phone, email, password, image, role } = req.body;
 
-  if (!name || !phone || !email || !password || !image) {
+  if (!name || !phone || !email || !password) {
     return res
       .status(400)
       .json({ status: 400, message: "All fields are required" });
   }
 
-
-
   const isExistEmail = await User.findOne({ email: email });
   const isExistPhone = await User.findOne({ phone: phone });
 
   if (isExistEmail && isExistPhone) {
-    return res
-      .status(409)
-      .json({
-        status: 409,
-        message: `User email and phone number already exist: ${email}, ${phone}`,
-      });
+    return res.status(409).json({
+      status: 409,
+      message: `User email and phone number already exist: ${email}, ${phone}`,
+    });
   } else if (isExistEmail) {
     return res
       .status(409)
@@ -46,23 +40,31 @@ export async function register(req, res) {
     });
   } else {
     try {
-    //   let userInfo = await new User(req.body);
-    //   userInfo = await userInfo.save();
-    //  const hashPassword = await dcrypt.hash(password, 10);
+      //   let userInfo = await new User(req.body);
+      //   userInfo = await userInfo.save();
+      //  const hashPassword = await dcrypt.hash(password, 10);
 
-    let userInfo = await new User({
-      name,
-      phone,
-      email,
-      password : await bcrypt.hash(password, 10),
-      image,
-      role
-    }).save();
+      let userInfo = await new User({
+        name,
+        phone,
+        email,
+        password: await bcrypt.hash(password, 10),
+        image,
+        role,
+      }).save();
 
-    if(!userInfo){
-      res.status(500).json({status:500, message:"Error while saving user info.."});
-    }
-      res.status(200).json({status: 201,message: "User registered successfully",user: userInfo,});
+      if (!userInfo) {
+        res
+          .status(500)
+          .json({ status: 500, message: "Error while saving user info.." });
+      }
+      res
+        .status(200)
+        .json({
+          status: 201,
+          message: "User registered successfully",
+          user: userInfo,
+        });
     } catch (error) {
       res.status(500).json({
         status: 500,
@@ -73,55 +75,69 @@ export async function register(req, res) {
 }
 
 export async function login(req, res) {
-
   dotenv.config();
-  const{email, password} = req.body;
-   if (!email || !password) {
+
+  const { email, password } = req.body;
+  if (!email || !password) {
     return res
       .status(400)
       .json({ status: 400, message: "All fields are required" });
   }
 
-  const userInfo = await User.findOne({email:email});
+  const userInfo = await User.findOne({ email: email });
 
-  if(!userInfo){
-    res.status(400).json({status:400, error: "Email not Exist"});
+  if (!userInfo) {
+    res.status(400).json({ status: 400, error: "Email not Exist" });
   }
 
-  const isPasswordMatchawait = await  bcrypt.compare(password, userInfo.password);
-  console.log(isPasswordMatchawait);
+  const isPasswordMatchawait = await bcrypt.compare(
+    password,
+    userInfo.password
+  );
+  // console.log(isPasswordMatchawait);
 
-  if(!isPasswordMatchawait){
-    res.status(400).json({status:400, error: "Invalid credential"});
+  if (!isPasswordMatchawait) {
+    res.status(400).json({ status: 400, error: "Invalid credential" });
   }
-
-
 
   const userToken = jwt.sign(
     {
-      id:userInfo._id,
-      role:userInfo.role
+      id: userInfo._id,
+      role: userInfo.role,
     },
     process.env.JWT_SECRET,
     {
-      expiresIn:"1d"
+      expiresIn: "1d",
     }
-  )
-  console.log(userToken);
+  );
+  // console.log(userToken);
 
-  // verify token
-  //  let verifiedToken  = jwt.verify(userToken,"uiuiuiuiuiuiuiuiuiuuffjejfejjjefjnejfejfejnfjefjenffe");
+  //verify token
+  //  let verifiedToken  = jwt.verify(userToken,process.env.JWT_SECRET);
   //  console.log(verifiedToken);
 
-  res.cookie("userToken",userToken,{
-    httpOnly:true,
+  res.cookie("userToken", userToken, {
+    httpOnly: true,
   });
 
-  res.status(200).json({status:200, message:"User Login Successfully."});
+  res.status(200).json({ status: 200, message: "User Login Successfully." });
+ 
+}
+
+export async function userProfile(req, res) {
+
+    const {id} =req.userInfo;
+    const userData = await User.findById({_id:id});
+    res.status(200).json({ status: 200, message: "Data in profile", data:userData});
   
 }
 
-export async function logout(req, res) {}
+export async function logout(req, res) {
+  res.clearCookie("userToken", {
+    httpOnly:true,
+  })
+  res.json({ message: "Logged out successfully" });
+}
 
 export async function updateUserById(req, res) {}
 

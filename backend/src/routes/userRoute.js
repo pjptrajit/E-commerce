@@ -1,5 +1,6 @@
 import express from 'express';
-import { register, login } from '../controllers/userController.js';
+import { register, login, userProfile, logout } from '../controllers/userController.js';
+import verifyToken from '../middlewares/verifyToken.js';
 
 
 const userRouter = express.Router();
@@ -9,7 +10,9 @@ const userRouter = express.Router();
 userRouter.post('/register', register);
 
 //read user route
-userRouter.get("/login",login);
+userRouter.post("/login",login);
+userRouter.get("/userProfile",verifyToken ,userProfile);
+userRouter.post("/userLogout",logout);
 
 // //delete user route
 // userRouter.delete();

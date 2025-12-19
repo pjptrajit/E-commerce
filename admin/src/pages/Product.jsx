@@ -5,33 +5,34 @@ function Product() {
 
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
   const [nameError, setNameError] = useState("");
   const [priceError, setPriceError] = useState("");
   const Navigate = useNavigate();
-  // const getProduct = async () => {
-  //   let res = await fetch("http://localhost:9000/api/product/getProduct", {
-  //     method: "GET",
-  //   });
-  //   res = await res.json();
-  //   console.log(res.data);
-  //   setProducts(res.data);
-  // };
 
-  // const deleteProduct = async (id) => {
-  //   let res = await fetch(
-  //     `http://localhost:9000/api/product/deleteProduct/${id}`,
-  //     {
-  //       method: "DELETE",
-  //     }
-  //   );
-  //   res = await res.json();
-  //   console.log(res.data);
-  //   getProduct();
-  // };
+  const getProduct = async () => {
+    let res = await fetch("http://localhost:9000/api/product/getAllProduct", {
+      method: "GET",
+    });
+    res = await res.json();
+    console.log(res.productInfo);
+    setProducts(res.productInfo);
+  };
+
+  const deleteProduct = async (id) => {
+    let res = await fetch(
+      `http://localhost:9000/api/product/deleteProduct/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    res = await res.json();
+    console.log(res);
+    getProduct();
+  };
 
   const createProduct = async (e) => {
     e.preventDefault();
@@ -54,14 +55,17 @@ function Product() {
       res = await res.json();
       console.log(res);
       console.log(res.productInfo);
-      // getProduct();
+      setName("");
+      setDescription("");
+      setPrice("");
+      getProduct();
     }
   };
   useEffect(() => {
-    // getProduct();
+    getProduct();
   }, []);
 
-
+ 
 
   return (
     <div>
@@ -83,6 +87,7 @@ function Product() {
                 className="border p-2 rounded-2xl outline-none w-72"
                 type="text"
                 placeholder="Name..."
+                value={name}
               />
               {nameError && (
                 <p className="text-red-500 italic text-sm">{nameError}</p>
@@ -100,6 +105,7 @@ function Product() {
                 className="border p-2 rounded-2xl outline-none w-72"
                 type="Number"
                 placeholder="Price.."
+                value={price}
               />
               {priceError && (
                 <p className="text-red-500 italic text-sm">{priceError}</p>
@@ -118,6 +124,7 @@ function Product() {
                 className="border p-2 rounded-2xl outline-none w-72"
                 type="file"
                 placeholder="Select image.."
+                accept="image/*"
               />
               {/* {priceError && (
                 <p className="text-red-500 italic text-sm">{priceError}</p>
@@ -136,6 +143,7 @@ function Product() {
                 className="border p-2 rounded-2xl outline-none w-72"
                 type="text"
                 placeholder="description...."
+                value={description}
               />
               {/* {priceError && (
                 <p className="text-red-500 italic text-sm">{priceError}</p>
@@ -154,6 +162,7 @@ function Product() {
           <thead>
             <tr className="border  bg-gray-600 text-white ">
               <th className="border p-4">SN.</th>
+              <th className="border p-4">Image</th>
               <th className="border p-4">Id</th>
               <th className="border p-4">Name</th>
               <th className="border p-4">Price</th>
@@ -169,6 +178,7 @@ function Product() {
                     className="border  hover:bg-gray-100 hover:text-black  bg-gray-200   "
                   >
                     <td className="border       p-10     "> {index + 1} </td>
+                    <td className="border       p-10     "> <img src={`http://localhost:9000/image/${item.image}`} alt="image not found!" /> </td>
                     <td className="border       p-10     "> {item._id} </td>
                     <td className="border       p-10      ">{item.name} </td>
                     <td className="border       p-10     ">Rs.{item.price} </td>

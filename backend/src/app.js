@@ -23,7 +23,7 @@ connectDB(process.env.MONGODB_URL);
 
 //setting
 app.use(cors({
-    origin:["http://localhost:5173", "http://localhost:5173"],
+    origin:["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
 }));    
 
@@ -34,6 +34,7 @@ app.use(cookieParser());
 //API Root Routes
 app.use('/api/user/v1', userRouter);
 app.use('/api/product', productRouter);
+app.use("/image", express.static('../public/images'));
 
 
 

@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 function Product() {
 
-  const [products, setProducts] = useState([]);
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+    const [products, setProducts] = useState([]);
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
+    const [description, setDescription] = useState("");
+    const [image, setImage] = useState("");
 
-  const [nameError, setNameError] = useState("");
-  const [priceError, setPriceError] = useState("");
+    const [nameError, setNameError] = useState("");
+    const [priceError, setPriceError] = useState("");
   const Navigate = useNavigate();
 
   const getProduct = async () => {
@@ -18,7 +18,7 @@ function Product() {
       method: "GET",
     });
     res = await res.json();
-    console.log(res.productInfo);
+    // console.log(res.productInfo);
     setProducts(res.productInfo);
   };
 
@@ -30,7 +30,7 @@ function Product() {
       }
     );
     res = await res.json();
-    console.log(res);
+    // console.log(res);
     getProduct();
   };
 
@@ -53,8 +53,8 @@ function Product() {
         body: formdata,
       });
       res = await res.json();
-      console.log(res);
-      console.log(res.productInfo);
+      // console.log(res);
+      // console.log(res.productInfo);
       setName("");
       setDescription("");
       setPrice("");
@@ -163,7 +163,7 @@ function Product() {
             <tr className="border  bg-gray-600 text-white ">
               <th className="border p-4">SN.</th>
               <th className="border p-4">Image</th>
-              <th className="border p-4">Id</th>
+              <th className="border p-4">Description</th>
               <th className="border p-4">Name</th>
               <th className="border p-4">Price</th>
               <th className="border p-4">Action</th>
@@ -177,12 +177,12 @@ function Product() {
                     key={item._id}
                     className="border  hover:bg-gray-100 hover:text-black  bg-gray-200   "
                   >
-                    <td className="border       p-10     "> {index + 1} </td>
-                    <td className="border       p-10     "> <img src={`http://localhost:9000/image/${item.image}`} alt="image not found!" /> </td>
-                    <td className="border       p-10     "> {item._id} </td>
-                    <td className="border       p-10      ">{item.name} </td>
-                    <td className="border       p-10     ">Rs.{item.price} </td>
-                    <td className="   flex gap-2     p-10     ">
+                    <td className="border p-10"> {index + 1} </td>
+                    <td className="border p-10"> <img src={`http://localhost:9000/image/${item.image}`} alt="image not found!" /> </td>
+                    <td className="border p-10"> {item.description} </td>
+                    <td className="border p-10">{item.name} </td>
+                    <td className="border p-10">Rs.{item.price} </td>
+                    <td className="flex gap-2 p-10">
                       <button
                         onClick={() => {
                           deleteProduct(item._id);

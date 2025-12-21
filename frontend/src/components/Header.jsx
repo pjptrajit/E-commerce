@@ -19,7 +19,7 @@ function Header() {
   return (
     <div className='w-full h-[10vh] flex justify-center items-center gap-5 border'>
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/login">Login</NavLink>
+        <NavLink to="/menu">Menu</NavLink>
         <NavLink to="/register">Register</NavLink>
         <NavLink to="/profile">Profile</NavLink>
         <NavLink to="/login" onClick={()=>{
@@ -27,6 +27,7 @@ function Header() {
          setUser(null);
          navigate('/login');
         }}>Logout</NavLink>
+        <NavLink to="/login">Login</NavLink>
 
 
     </div>
